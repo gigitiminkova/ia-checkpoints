@@ -1,321 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Gallery</title>
+    <title>Carte de Prix</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        :root {
-            --bg-color: #f5f5f5;
-            --card-bg: #ffffff;
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --accent-color: #6366f1;
-            --shadow: rgba(0, 0, 0, 0.1);
-            --transition: 0.3s ease;
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #1a1a1a;
-            --card-bg: #2d2d2d;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --accent-color: #818cf8;
-            --shadow: rgba(255, 255, 255, 0.05);
-        }
-
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            transition: background-color var(--transition), color var(--transition);
+            background-color: #f5f5f5;
+            padding: 20px;
         }
-
-        .header {
+        
+        .pricing {
+            max-width: 300px;
+            width: 100%;
+            margin: auto;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 30px 20px;
             text-align: center;
-            margin-bottom: 3rem;
-            opacity: 0;
-            animation: fadeIn 0.6s ease forwards;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--accent-color), #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        
+        .pricing:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
         }
-
-        .header p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
         }
-
-        .theme-toggle {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            background: var(--card-bg);
-            border: 2px solid var(--accent-color);
-            color: var(--text-primary);
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all var(--transition);
-            box-shadow: 0 4px 6px var(--shadow);
-            z-index: 1000;
+        
+        .price {
+            font-size: 32px;
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
-
-        .theme-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px var(--shadow);
-            background: var(--accent-color);
+        
+        .features {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .features li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+        
+        .features li:last-child {
+            border-bottom: none;
+        }
+        
+        .features li::before {
+            content: "✓ ";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .btn {
+            background: #2196F3;
             color: white;
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px var(--shadow);
-            transition: all var(--transition);
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        .card:nth-child(1) {
-            animation-delay: 0.2s;
-        }
-
-        .card:nth-child(2) {
-            animation-delay: 0.4s;
-        }
-
-        .card:nth-child(3) {
-            animation-delay: 0.6s;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px var(--shadow);
-        }
-
-        .card-image {
-            width: 100%;
-            height: 250px;
-            background: linear-gradient(135deg, var(--accent-color), #ec4899);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            transition: transform var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card:hover .card-image {
-            transform: scale(1.1);
-        }
-
-        .card-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .card:hover .card-image::before {
-            left: 100%;
-        }
-
-        .card-content {
-            padding: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .card-description {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .card-price {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-
-        .card-button {
-            width: 100%;
-            padding: 0.875rem;
-            background: var(--accent-color);
-            color: white;
+            padding: 12px 30px;
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all var(--transition);
+            transition: background 0.3s ease;
+            width: 100%;
         }
-
-        .card-button:hover {
-            background: #4f46e5;
-            transform: scale(1.05);
+        
+        .btn:hover {
+            background: #1976D2;
         }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .theme-toggle {
-                top: 1rem;
-                right: 1rem;
-                padding: 0.5rem 1rem;
-                font-size: 0.9rem;
-            }
-
-            .gallery {
-                grid-template-columns: 1fr;
-            }
+        
+        .btn:active {
+            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
-    <button class="theme-toggle" id="themeToggle">
-        🌙 Dark Mode
-    </button>
-
-    <div class="header">
-        <h1>Featured Products</h1>
-        <p>Discover our exclusive collection</p>
+    <div class="pricing">
+        <h2 class="title">Forfait de base</h2>
+        <p class="price">9,99 $/mois</p>
+        <ul class="features">
+            <li>1 Go de stockage</li>
+            <li>Assistance de base</li>
+            <li>Toutes les fonctionnalités principales</li>
+        </ul>
+        <button class="btn" onclick="startTrial()">Démarrer l'essai</button>
     </div>
-
-    <div class="gallery">
-        <div class="card">
-            <div class="card-image">📱</div>
-            <div class="card-content">
-                <h3 class="card-title">Smart Phone</h3>
-                <p class="card-description">
-                    Experience cutting-edge technology with our latest smartphone featuring advanced AI capabilities.
-                </p>
-                <div class="card-price">$799</div>
-                <button class="card-button">Add to Cart</button>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-image">⌚</div>
-            <div class="card-content">
-                <h3 class="card-title">Smart Watch</h3>
-                <p class="card-description">
-                    Track your fitness goals and stay connected with our premium smartwatch collection capabilities.
-                </p>
-                <div class="card-price">$399</div>
-                <button class="card-button">Add to Cart</button>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-image">🎧</div>
-            <div class="card-content">
-                <h3 class="card-title">Headphones</h3>
-                <p class="card-description">
-                    Immerse yourself in crystal-clear audio with active noise cancellation technology capabilities.
-                </p>
-                <div class="card-price">$299</div>
-                <button class="card-button">Add to Cart</button>
-            </div>
-        </div>
-    </div>
-
+    
     <script>
-        const themeToggle = document.getElementById('themeToggle');
-        const html = document.documentElement;
-
-        // Check for saved theme preference or default to light mode
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        html.setAttribute('data-theme', currentTheme);
-        updateToggleButton(currentTheme);
-
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateToggleButton(newTheme);
-        });
-
-        function updateToggleButton(theme) {
-            if (theme === 'dark') {
-                themeToggle.textContent = '☀️ Light Mode';
-            } else {
-                themeToggle.textContent = '🌙 Dark Mode';
-            }
+        function startTrial() {
+            alert('Essai gratuit démarré ! 🎉');
         }
-
-        // Add click event to all "Add to Cart" buttons
-        document.querySelectorAll('.card-button').forEach(button => {
-            button.addEventListener('click', function(e) {
-                const originalText = this.textContent;
-                this.textContent = '✓ Added!';
-                this.style.background = '#10b981';
-                
-                setTimeout(() => {
-                    this.textContent = originalText;
-                    this.style.background = '';
-                }, 2000);
-            });
-        });
     </script>
 </body>
 </html>
